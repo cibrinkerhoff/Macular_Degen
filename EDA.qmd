@@ -1,0 +1,12 @@
+---
+title: "Untitled"
+author: "EDA"
+format: html
+editor: visual
+---
+
+```{r}
+
+library(tidyverse)
+mac <- vroom::vroom("ARMD.txt")
+```
