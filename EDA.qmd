@@ -1,11 +1,13 @@
 ---
-title: "Untitled"
-author: "EDA"
+title: "EDA"
+author: "Matthew Wilson"
 format: html
 editor: visual
 ---
 
 ```{r}
+
+
 library(patchwork)
 library(tidyverse)
 mac <- vroom::vroom("ARMD.txt")
@@ -14,23 +16,78 @@ mac$Trt <- as.factor(mac$Trt)
 
 ```{r}
 
-mac %>%
-  ggplot(aes(x = Vision, y = as.factor(Time), fill = as.factor(Trt)))+
-  geom_violin()
+# mac %>%
+#   ggplot(aes(x = Vision, y = as.factor(Time), fill = as.factor(Trt)))+
+#   geom_violin()
 
 mac %>%
-  ggplot(aes(x = Baseline-Vision, y = as.factor(Time), fill = as.factor(Trt)))+
-  geom_violin()
+  ggplot(aes(x = Vision,
+             y = as.factor(Time),
+             fill = as.factor(Trt))) +
+  geom_violin(alpha = 0.8) +
+  labs(
+    title = "Distribution of Vision by Time and Treatment",
+    x = "Vision Score",
+    y = "Time (Weeks)",
+    fill = "Treatment"
+  ) +
+  theme_minimal()
+
+# 
+# mac %>%
+#   ggplot(aes(x = Baseline-Vision, y = as.factor(Time), fill = as.factor(Trt)))+
+#   geom_violin()
 
 mac %>%
-  filter(Time == 52)%>%
-  ggplot(aes(x = Vision, fill = as.factor(Trt)))+
-  geom_histogram()
+  ggplot(aes(x = Baseline - Vision,
+             y = as.factor(Time),
+             fill = as.factor(Trt))) +
+  geom_violin(alpha = 0.8) +
+  labs(
+    title = "Change in Vision from Baseline by Time",
+    x = "Baseline − Vision (Change Score)",
+    y = "Time (Weeks)",
+    fill = "Treatment"
+  ) +
+  theme_minimal()
+
+# mac %>%
+#   filter(Time == 52)%>%
+#   ggplot(aes(x = Vision, fill = as.factor(Trt)))+
+#   geom_histogram()
 
 mac %>%
-  ggplot(aes(x = Time, y = Vision, fill = Trt))+
-  geom_point()
+  filter(Time == 52) %>%
+  ggplot(aes(x = Vision, fill = as.factor(Trt))) +
+  geom_histogram(
+    bins = 20,
+    alpha = 0.7,
+    position = "identity"
+  ) +
+  labs(
+    title = "Vision Distribution at Week 52",
+    x = "Vision Score",
+    y = "Count",
+    fill = "Treatment"
+  ) +
+  theme_minimal()
 
+# mac %>%
+#   ggplot(aes(x = Time, y = Vision, color = as.factor(Trt)))+
+#   geom_point()
+
+mac %>%
+  ggplot(aes(x = Time,
+             y = Vision,
+             color = as.factor(Trt))) +
+  geom_point(size = 2, alpha = 0.8) +
+  labs(
+    title = "Vision Over Time by Treatment",
+    x = "Time (Weeks)",
+    y = "Vision Score",
+    color = "Treatment"
+  ) +
+  theme_minimal()
 ```
 
 ```{r}
