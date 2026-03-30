@@ -188,6 +188,7 @@ Corbin B, Matthew W
 <p>Time (β₂) - The rate of vision loss per week for the control group</p>
 <p>Treatment (β₃) - The average difference in vision between treated and control at Time = 0</p>
 <p>Time × Treatment (β₄) - How much the treated group’s slope differs from control — the treatment effect on the rate of decline</p>
+<<<<<<< HEAD
 </section>
 <section id="does-interferon-α-stop-vision-loss" class="slide level2">
 <h2>Does interferon-α stop vision loss?</h2>
@@ -229,6 +230,38 @@ Corbin B, Matthew W
 <p>We calculated this using a generalized linear hypothesis test (glht) that lets us compare the expected difference of certain factors while holding all others constant.</p>
 <p>In this case, our hypothesis was that :</p>
 <p>undefined+ Time:TrtTreated * 52</p>
+=======
+<p>more junk</p>
+<p>even more</p>
+</section>
+<section id="does-interferon--stop-vision-loss-over-time-if-not-how-much-does-interferon-α-slow" class="slide level2">
+<h2>3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow</h2>
+<p>degeneration relative to no treatment?</p>
+</section>
+<section id="do-patients-on-interferon-α-have-a-higher-vision-score-at-52-weeks" class="slide level2">
+<h2>4. Do patients on interferon-α have a higher vision score at 52 weeks</h2>
+<p>Yes they do!</p>
+<p>On average, <strong>we expect the vision score to be 8.241 points higher.</strong></p>
+<p>Our 95% Confidence Interval is between 4.2415 and 12.2408.</p>
+</section>
+<section id="how-we-determined-this" class="slide level2">
+<h2>How we determined this</h2>
+<p>We calculated this using a generalized linear hypothesis test (glht) that lets us compare the expected difference of certain factors while holding all others constant.</p>
+<p>In this case, our hypothesis was that :β₃ + β₄*52 = 0</p>
+<p>Keep in mind β₃ is the coefficient for the interferon-α treatment and β₄ is the coefficient for the interaction between the interferon-α treatment and time.</p>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li><p>Each patient was measured four times - observations within a subject are correlated</p></li>
+<li><p>We modeled this correlation structure directly, and also the interaction between the treatment type and time on vision scores</p></li>
+<li><p>Using this model we found</p>
+<ul>
+<li><p>Interferon-α does not stop vision loss, but it does slow it</p></li>
+<li><p>Patients on interferon-α have a significantly higher vision score at 52 weeks</p></li>
+</ul></li>
+</ul>
+>>>>>>> ef80854878aa0a99533f95ca7a0f51dfe6989539
 
 </section>
     </div>
