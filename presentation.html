@@ -138,7 +138,6 @@ Corbin B, Matthew W
 </div>
 
 </section>
-<<<<<<< HEAD
 <section id="eda---basic-trends" class="slide level2">
 <h2>1. EDA - Basic Trends</h2>
 
@@ -159,15 +158,6 @@ Corbin B, Matthew W
 </div>
 </div>
 <p>This matrix helps demonstrate the correlation of a subjects vision over time. We see that there is a connection between a subject’s different Vision Scores that should not be ignored. If we were to use a traditional linear regression model, this correlation would not be accounted for as part of the model.</p>
-</section>
-<section id="modeling---what-model-did-you-use-to-do-this-analysis-and-are-any-assumptions-justified-by-the" class="slide level2">
-<h2>2. Modeling - what model did you use to do this analysis and are any assumptions justified by the</h2>
-<p>data. Also explain any parameters in model and what they mean in the context of the problem. This section should be specific enough that they know exactly what terms are included in your model.</p>
-<p>more junk</p>
-<p>even more</p>
-=======
-<section id="eda---what-basic-trends-do-the-data-show-in-relation-to-interferon-α" class="slide level2">
-<h2>1. EDA - what basic trends do the data show in relation to interferon-α</h2>
 </section>
 <section id="model" class="slide level2">
 <h2>Model</h2>
@@ -198,33 +188,36 @@ Corbin B, Matthew W
 <p>Time (β₂) - The rate of vision loss per week for the control group</p>
 <p>Treatment (β₃) - The average difference in vision between treated and control at Time = 0</p>
 <p>Time × Treatment (β₄) - How much the treated group’s slope differs from control — the treatment effect on the rate of decline</p>
->>>>>>> 6d892664fed952c1fcdbce7bf40024f3afc93f5a
+<p>more junk</p>
+<p>even more</p>
 </section>
 <section id="does-interferon--stop-vision-loss-over-time-if-not-how-much-does-interferon-α-slow" class="slide level2">
 <h2>3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow</h2>
 <p>degeneration relative to no treatment?</p>
 </section>
-<section id="on-average-and-after-controlling-for-the-baseline-score-do-patients-on-interferon" class="slide level2">
-<h2>4. On average and after controlling for the baseline score, do patients on interferon</h2>
-<<<<<<< HEAD
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-     Simultaneous Tests for General Linear Hypotheses
-
-Fit: gls(model = Vision ~ Baseline + Time * Trt, data = dat, correlation = corSymm(form = ~4 | 
-    Subject))
-
-Linear Hypotheses:
-                                       Estimate Std. Error z value Pr(&gt;|z|)    
-TrtTreated + Time:TrtTreated * 52 == 0    8.241      2.041   4.038 5.38e-05 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-(Adjusted p values reported -- single-step method)</code></pre>
-</div>
-</div>
-=======
->>>>>>> 6d892664fed952c1fcdbce7bf40024f3afc93f5a
+<section id="do-patients-on-interferon-α-have-a-higher-vision-score-at-52-weeks" class="slide level2">
+<h2>4. Do patients on interferon-α have a higher vision score at 52 weeks</h2>
+<p>Yes they do!</p>
+<p>On average, <strong>we expect the vision score to be 8.241 points higher.</strong></p>
+<p>Our 95% Confidence Interval is between 4.2415 and 12.2408.</p>
+</section>
+<section id="how-we-determined-this" class="slide level2">
+<h2>How we determined this</h2>
+<p>We calculated this using a generalized linear hypothesis test (glht) that lets us compare the expected difference of certain factors while holding all others constant.</p>
+<p>In this case, our hypothesis was that :β₃ + β₄*52 = 0</p>
+<p>Keep in mind β₃ is the coefficient for the interferon-α treatment and β₄ is the coefficient for the interaction between the interferon-α treatment and time.</p>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li><p>Each patient was measured four times - observations within a subject are correlated</p></li>
+<li><p>We modeled this correlation structure directly, and also the interaction between the treatment type and time on vision scores</p></li>
+<li><p>Using this model we found</p>
+<ul>
+<li><p>Interferon-α does not stop vision loss, but it does slow it</p></li>
+<li><p>Patients on interferon-α have a significantly higher vision score at 52 weeks</p></li>
+</ul></li>
+</ul>
 
 </section>
     </div>
@@ -442,7 +435,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
         ]
       });
     </script>
-<<<<<<< HEAD
     
 
     <script>
@@ -519,8 +511,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
     
 
-=======
->>>>>>> 6d892664fed952c1fcdbce7bf40024f3afc93f5a
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

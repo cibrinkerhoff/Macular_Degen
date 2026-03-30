@@ -171,13 +171,19 @@ degeneration relative to no treatment?
 
 ## 4. Do patients on interferon-α have a higher vision score at 52 weeks
 
-Yes they do! On average, we expect the vision score to be 8.241 points higher. Our 95% Confidence Interval is between 4.2415 and 12.2408.
+Yes they do!
+
+On average, **we expect the vision score to be 8.241 points higher.**
+
+Our 95% Confidence Interval is between 4.2415 and 12.2408.
+
+## How we determined this
 
 We calculated this using a generalized linear hypothesis test (glht) that lets us compare the expected difference of certain factors while holding all others constant.
 
-In this case, our hypothesis was that :
+In this case, our hypothesis was that :β₃ + β₄\*52 = 0
 
-undefined+ Time:TrtTreated \* 52
+Keep in mind β₃ is the coefficient for the interferon-α treatment and β₄ is the coefficient for the interaction between the interferon-α treatment and time.
 
 ```{r}
 
@@ -224,3 +230,15 @@ glht_52 <- glht(
 #summary(glht_52)
 #confint(glht_52)
 ```
+
+## Summary
+
+-   Each patient was measured four times - observations within a subject are correlated
+
+-   We modeled this correlation structure directly, and also the interaction between the treatment type and time on vision scores
+
+-   Using this model we found
+
+    -   Interferon-α does not stop vision loss, but it does slow it
+
+    -   Patients on interferon-α have a significantly higher vision score at 52 weeks
