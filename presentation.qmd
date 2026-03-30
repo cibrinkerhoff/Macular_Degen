@@ -5,14 +5,190 @@ format: revealjs
 editor: visual
 ---
 
-## 1. EDA - what basic trends do the data show in relation to interferon-α
+```{r, echo=FALSE, warning=FALSE}
+
+library(patchwork)
+library(tidyverse)
+mac <- vroom::vroom("ARMD.txt")
+mac$Trt <- as.factor(mac$Trt)
+
+```
+
+## 1. EDA - Basic Trends
+
+```{r}
+
+fill_trt <- scale_fill_manual(
+  name = "Treatment",
+  values = c("0" = "gray70", "1" = "steelblue"),
+  labels = c("No", "Yes")
+)
+
+color_trt <- scale_color_manual(
+  name = "Treatment",
+  values = c("0" = "gray40", "1" = "steelblue"),
+  labels = c("No", "Yes")
+)
+
+p1 <- mac %>%
+  ggplot(aes(x = Vision,
+             y = as.factor(Time),
+             fill = as.factor(Trt))) +
+  geom_violin(alpha = 0.8) +
+  labs(
+    title = "Distribution of Vision by Time and Treatment",
+    x = "Vision Score",
+    y = "Time (Weeks)",
+    fill = "Treatment"
+  ) +
+  fill_trt+
+  theme_minimal()
+
+
+p2 <- mac %>%
+  ggplot(aes(x = Baseline - Vision,
+             y = as.factor(Time),
+             fill = as.factor(Trt))) +
+  geom_violin(alpha = 0.8) +
+  labs(
+    title = "Change in Vision from Baseline by Time",
+    x = "Baseline − Vision (Change Score)",
+    y = "Time (Weeks)",
+    fill = "Treatment"
+  ) +
+  fill_trt+
+  theme_minimal()
+
+
+p3 <- mac %>%
+  filter(Time == 52) %>%
+  ggplot(aes(x = Vision, fill = as.factor(Trt))) +
+  geom_histogram(
+    bins = 20,
+    alpha = 0.7,
+    position = "identity"
+  ) +
+  labs(
+    title = "Vision Distribution at Week 52",
+    x = "Vision Score",
+    y = "Count",
+    fill = "Treatment"
+  ) +
+  fill_trt+
+  theme_minimal()
+
+p4 <- mac %>%
+  ggplot(aes(x = Time,
+             y = Vision,
+             color = as.factor(Trt))) +
+  geom_point(size = 2, alpha = 0.8) +
+  labs(
+    title = "Vision Over Time by Treatment",
+    x = "Time (Weeks)",
+    y = "Vision Score",
+    color = "Treatment"
+  ) +
+  color_trt+
+  theme_minimal()
+
+treat_means <- mac %>%
+  group_by(Time, Trt)%>%
+  summarise(mean_vis = mean(Vision))
+
+p5 <- treat_means %>%
+  ggplot(aes(y=mean_vis, x = Time, color = Trt))+
+  geom_line()+
+  labs(
+    title = "Interaction Plot: Mean Vision Score over time by Treatment",
+    y = "Mean Vision Score Across Subjects"
+  )+
+  color_trt+
+  theme_minimal()
+
+p1+p3
+```
+
+## EDA Cont.
+
+```{r}
+p5
+```
+
+## EDA Cont.
+
+```{r}
+
+ind_lm <- lm(Vision ~ Time + Trt + Baseline, data = mac)
+
+cor(matrix(residuals(ind_lm),ncol = 4, byrow = T))
+```
+
+This matrix helps demonstrate the correlation of a subjects vision over time. We see that there is a connection between a subject's different Vision Scores that should not be ignored. If we were to use a traditional linear regression model, this correlation would not be accounted for as part of the model.
 
 ## 2. Modeling - what model did you use to do this analysis and are any assumptions justified by the
 
 data. Also explain any parameters in model and what they mean in the context of the problem. This section should be specific enough that they know exactly what terms are included in your model.
 
+more junk
+
+even more
+
 ## 3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow
 
 degeneration relative to no treatment?
 
-## 4. On average and after controlling for the baseline score, do patients on interferon
+## 4. Do patients on interferon-α have a higher vision score at 52 weeks
+
+Yes they do! On average, we expect the vision score to be 8.241 points higher. Our 95% Confidence Interval is between 4.2415 and 12.2408.
+
+We calculated this using a generalized linear hypothesis test (glht) that lets us compare the expected difference of certain factors while holding all others constant.
+
+In this case, our hypothesis was that :
+
+undefined+ Time:TrtTreated \* 52
+
+```{r}
+
+library(nlme)
+
+dat <- vroom::vroom("ARMD.txt")
+
+# Make TAU (0) the baseline for Trt
+dat <- dat %>%
+  mutate(Trt = factor(Trt, levels = c(0, 1), labels = c("Control", "Treated")))
+
+
+#FINAL MODEL
+
+time_trt_mod <- gls(
+  Vision ~ Baseline + Time * Trt,
+  data = dat,
+  correlation = corSymm(form = ~ 4 | Subject)
+)
+
+
+
+#On average and after controlling for the baseline score, do patients on interferon- have a
+#significantly higher vision score at 52 weeks than those not on the treatment?
+
+
+library(multcomp)
+
+glht_52 <- glht(
+  time_trt_mod,
+  linfct = c(
+    "TrtTreated + Time:TrtTreated * 52 = 0"
+  )
+)
+library(multcomp)
+
+glht_52 <- glht(
+  time_trt_mod,
+  linfct = c(
+    "TrtTreated + Time:TrtTreated * 52 = 0"
+  )
+)
+
+#summary(glht_52)
+#confint(glht_52)
+```
