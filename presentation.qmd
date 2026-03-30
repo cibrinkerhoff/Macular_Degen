@@ -7,9 +7,41 @@ editor: visual
 
 ## 1. EDA - what basic trends do the data show in relation to interferon-α
 
-## 2. Modeling - what model did you use to do this analysis and are any assumptions justified by the
+## Model
 
-data. Also explain any parameters in model and what they mean in the context of the problem. This section should be specific enough that they know exactly what terms are included in your model.
+We fit a **Generalized Least Squares (GLS)** model to account for the fact that each patient was measured four times — meaning observations within a subject are correlated and can't be treated as independent.
+
+The model is:
+
+> **Vision = β₀ + β₁(Baseline) + β₂(Time) + β₃(Trt) + β₄(Time × Trt) + ε**
+
+## Why GLS
+
+Each subject has 4 repeated measurements (weeks 4, 12, 24, 52). Measurements closer together in time tend to be more similar than measurements far apart. We used a compound symmetry / unstructured correlation structure (`corSymm`) to model this directly — this lets the data tell us how correlated any two timepoints are, rather than assuming they're all equally correlated or all independent.
+
+## Justifying Assumptions (part 1)
+
+Repeated measures correlation: Justified — patients were measured at the same 4 timepoints, and we'd expect a patient who sees well at week 4 to still see relatively well at week 12. Using corSymm lets us estimate this rather than assume it away.
+
+Including Baseline as a covariate: Justified — patients entered the trial with very different vision scores (range: 31–85 letters). Without adjusting for baseline, we'd be comparing apples to oranges across groups.
+
+## Justifying Assumptions (part 2)
+
+Dropping Baseline × Trt interaction: Justified by the model selection F-test — the interaction was not significant, meaning the effect of baseline vision on follow-up vision does not differ between treatment groups.
+
+Keeping Time × Trt interaction: Justified by the F-test — this interaction was significant, meaning the two groups decline at statistically different rates.
+
+## Parameters in Context
+
+Intercept (β₀) - Baseline Vision when all predictors = 0
+
+Baseline (β₁) - Each additional letter of baseline vision predicts higher vision at follow-up — controls for where each patient started
+
+Time (β₂) - The rate of vision loss per week for the control group
+
+Treatment (β₃) - The average difference in vision between treated and control at Time = 0
+
+Time × Treatment (β₄) - How much the treated group's slope differs from control — the treatment effect on the rate of decline
 
 ## 3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow
 
