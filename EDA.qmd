@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-```{r}
+```{r, echo=FALSE}
 
 
 library(patchwork)
@@ -14,7 +14,7 @@ mac <- vroom::vroom("ARMD.txt")
 mac$Trt <- as.factor(mac$Trt)
 ```
 
-```{r}
+```{r, echo=FALSE}
 
 # mac %>%
 #   ggplot(aes(x = Vision, y = as.factor(Time), fill = as.factor(Trt)))+
@@ -90,20 +90,20 @@ mac %>%
   theme_minimal()
 ```
 
-```{r}
+```{r, echo=FALSE}
 
 treat_means <- mac %>%
   group_by(Time, Trt)%>%
   summarise(mean_vis = mean(Vision))
 ```
 
-```{r}
+```{r, echo=FALSE}
 treat_means %>%
   ggplot(aes(y=mean_vis, x = Time, color = Trt))+
   geom_line()
 ```
 
-```{r}
+```{r, echo=FALSE}
 
 ind_lm <- lm(Vision ~ Time + Trt + Baseline, data = mac)
 
