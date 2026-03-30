@@ -6,7 +6,49 @@ editor: visual
 ---
 
 ```{r}
-
+library(patchwork)
 library(tidyverse)
 mac <- vroom::vroom("ARMD.txt")
+mac$Trt <- as.factor(mac$Trt)
+```
+
+```{r}
+
+mac %>%
+  ggplot(aes(x = Vision, y = as.factor(Time), fill = as.factor(Trt)))+
+  geom_violin()
+
+mac %>%
+  ggplot(aes(x = Baseline-Vision, y = as.factor(Time), fill = as.factor(Trt)))+
+  geom_violin()
+
+mac %>%
+  filter(Time == 52)%>%
+  ggplot(aes(x = Vision, fill = as.factor(Trt)))+
+  geom_histogram()
+
+mac %>%
+  ggplot(aes(x = Time, y = Vision, fill = Trt))+
+  geom_point()
+
+```
+
+```{r}
+
+treat_means <- mac %>%
+  group_by(Time, Trt)%>%
+  summarise(mean_vis = mean(Vision))
+```
+
+```{r}
+treat_means %>%
+  ggplot(aes(y=mean_vis, x = Time, color = Trt))+
+  geom_line()
+```
+
+```{r}
+
+ind_lm <- lm(Vision ~ Time + Trt + Baseline, data = mac)
+
+cor(matrix(residuals(ind_lm),ncol = 4, byrow = T))
 ```
