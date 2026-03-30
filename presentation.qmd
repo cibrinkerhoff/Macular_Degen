@@ -161,13 +161,85 @@ Treatment (β₃) - The average difference in vision between treated and control
 
 Time × Treatment (β₄) - How much the treated group's slope differs from control — the treatment effect on the rate of decline
 
-more junk
+## Does interferon-α stop vision loss?
 
-even more
+No, but it slows it substantially.
 
-## 3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow
+Both groups lose vision over the 52-week study. Neither group's vision stabilizes or improves on average. The question is whether the rate of loss differs.
+```{R}
+#| fig-align: center
+library(nlme)
+library(tidyverse)
+library(vroom)
 
-degeneration relative to no treatment?
+# Load & prep data
+dat <- vroom("ARMD.txt")
+dat <- dat %>%
+  mutate(Trt = factor(Trt, levels = c(0, 1), labels = c("Control", "Treated")))
+
+# Fit final model
+time_trt_mod <- gls(
+  Vision ~ Baseline + Time * Trt,
+  data = dat,
+  correlation = corSymm(form = ~ 4 | Subject)
+)
+
+# Extract coefficients
+coefs <- coef(time_trt_mod)
+
+# Slopes for each group
+slope_control <- coefs["Time"]
+slope_treated <- coefs["Time"] + coefs["Time:TrtTreated"]
+
+# Slowing effect (%)
+slowing_pct <- (1 - slope_treated / slope_control) * 100
+
+# Weekly vision loss over 52 weeks
+loss_control <- slope_control * 52
+loss_treated <- slope_treated * 52
+
+# Optional: plot fitted trajectories
+times <- c(0, 4, 12, 24, 52)
+baseline_mean <- mean(dat$Baseline)
+
+traj <- data.frame(
+  Time  = rep(times, 2),
+  Group = rep(c("Control", "Treated"), each = length(times)),
+  Vision = c(
+    baseline_mean + slope_control * times,
+    baseline_mean + slope_treated * times
+  )
+)
+
+ggplot(traj, aes(x = Time, y = Vision, color = Group)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c("Control" = "#E24B4A", "Treated" = "#378ADD")) +
+  labs(
+    title = "Fitted Vision Trajectories by Treatment Group",
+    x = "Week", y = "Vision Score (letters)",
+    color = NULL
+  ) +
+  theme_minimal(base_size = 13)
+
+```
+
+## How much does interferon-α slow
+
+The Time × Treatment coefficient of +0.163 means that for every week that passes, treated patients lose 0.163 fewer letters than control patients. Interferon-α does not stop vision loss, but it cuts the rate of degeneration in half — treated patients lost 8.7 letters over the year compared to 17.1 letters in the control group, a 49% reduction in the rate of decline.
+
+```{r}
+#| fig-align: center
+# Print results
+cat("=== Vision Loss Slopes (letters per week) ===\n")
+cat(sprintf("Control:  %.4f\n", slope_control))
+cat(sprintf("Treated:  %.4f\n", slope_treated))
+cat(sprintf("Interaction (Time:Trt): %.4f\n", coefs["Time:TrtTreated"]))
+cat("\n=== Over 52 Weeks ===\n")
+cat(sprintf("Control total loss:  %.2f letters\n", loss_control))
+cat(sprintf("Treated total loss:  %.2f letters\n", loss_treated))
+
+```
 
 ## 4. Do patients on interferon-α have a higher vision score at 52 weeks
 
