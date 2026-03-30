@@ -1,0 +1,18 @@
+---
+title: "Macular Degeneration Model"
+author: "Corbin B, Matthew W"
+format: revealjs
+editor: visual
+---
+
+## 1. EDA - what basic trends do the data show in relation to interferon-α
+
+## 2. Modeling - what model did you use to do this analysis and are any assumptions justified by the
+
+data. Also explain any parameters in model and what they mean in the context of the problem. This section should be specific enough that they know exactly what terms are included in your model.
+
+## 3. Does interferon- stop vision loss over time? If not, how much does interferon-α slow
+
+degeneration relative to no treatment?
+
+## 4. On average and after controlling for the baseline score, do patients on interferon
