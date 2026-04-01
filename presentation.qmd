@@ -166,6 +166,7 @@ Time × Treatment (β₄) - How much the treated group's slope differs from cont
 No, but it slows it substantially.
 
 Both groups lose vision over the 52-week study. Neither group's vision stabilizes or improves on average. The question is whether the rate of loss differs.
+
 ```{R}
 #| fig-align: center
 library(nlme)
